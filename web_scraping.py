@@ -4,49 +4,47 @@ import requests
 
 
 def main():
-
-    request = requests.get('https://scrapepark.org/')
-
-    ############ FITXER XML ############
-    # tree = etree.parse('ods.xml')
+    ###################### PETICIÓ WEB ######################
+    request = requests.get('https://scrapepark.org')
     tree = html.fromstring(request.content)
-    ####################################
+    ##########################################################
 
-    ############## XPATH ###############
-    xpath = "//div/div/h5/text()[normalize-space()='12']/../../h6/text()normalize-space()"
-    xpath = "/html/body/footer//div[@class='information-f']/p[3]/span/text()"
-    ####################################
+    ######################### XPATH ##########################
+    xpath = ""
+    ##########################################################
 
-    # Evalua l'expressió XPath
+    # Avalua l'expressió XPath
     resultat = tree.xpath(xpath)
-    printXML(resultat)
+    printXPath(resultat)
 
 
-# Funció que imprimeix correctament el resultat de la cerca amb XPath en funció de si el resultat
-# és un XML o bé un string, o bé una llista.
-def printXML(xml):
+# Funció que imprimeix correctament el resultat de la cerca amb XPath en funció de
+# si el resultat és un XML, un HTML, un string, o bé una llista.
+def printXPath(result):
     # si és string
-    if type(xml) is etree._ElementUnicodeResult:
-        print(xml)
+    if type(result) is str or type(result) is etree._ElementUnicodeResult:
+        print(result)
 
-    # si és xml, prettyprint
-    elif type(xml) is etree._Element:
-        et = etree.ElementTree(xml)
+    # si és xml
+    elif type(result) is etree._Element:
+        et = etree.ElementTree(result)
         et.write(stdout.buffer, pretty_print=True)
 
-    elif type(xml) is html.HtmlElement:
-        print(html.tostring(xml))
+    # si és html
+    elif type(result) is html.HtmlElement:
+        print(str(html.tostring(result)).replace("b'", "").replace("'", ""))
 
-        # si és llista, un a un recursivament.
-    elif type(xml) is list:
-        if len(xml) == 0:
+    # si és llista, un a un recursivament.
+    elif type(result) is list:
+        if len(result) == 0:
             print([])
-        for x in xml:
-            printXML(x)
+
+        for recursion in result:
+            printXPath(recursion)
 
     # error
     else:
-        print("No es reconeix el tipus (", type(xml), ") de ", xml)
+        print("No es reconeix el tipus (", type(result), ") de ", result)
 
 
 # Main del programa
