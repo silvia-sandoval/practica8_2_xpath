@@ -1,12 +1,17 @@
 from lxml import etree, html
-from sys import stdout
+from sys import stdout, stderr
 import requests
 
 
 def main():
     ###################### PETICIÓ WEB ######################
-    request = requests.get('https://scrapepark.org')
-    tree = html.fromstring(request.content)
+    try:
+        request = requests.get('https://scrapepark.org')
+        tree = html.fromstring(request.content)
+
+    except requests.exceptions.ConnectionError:
+        print("Sembla que no tens connexió a internet!", file=stderr)
+        return
     ##########################################################
 
     ######################### XPATH ##########################
