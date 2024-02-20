@@ -10,7 +10,7 @@ def main():
     ##########################################################
 
     ######################### XPATH ##########################
-    xpath = ""
+    xpath = "//head/title"
     ##########################################################
 
     # Avalua l'expressió XPath
@@ -32,7 +32,9 @@ def printXPath(result):
 
     # si és html
     elif type(result) is html.HtmlElement:
-        print(str(html.tostring(result)).replace("b'", "").replace("'", ""))
+        print(str(html.tostring(result))
+              .replace("b'", "").replace("'", "")   # esborra la marca de bytes
+              .replace("\\r\\n", "\n"))             # aplica els salts de línia marcats
 
     # si és llista, un a un recursivament.
     elif type(result) is list:
