@@ -6,7 +6,7 @@ import requests
 def main():
     ###################### PETICIÓ WEB ######################
     try:
-        request = requests.get('https://scrapepark.org')
+        request = requests.get('https://scrapepark.org/table.html')
         tree = html.fromstring(request.content)
 
     except requests.exceptions.ConnectionError:
@@ -15,7 +15,7 @@ def main():
     ##########################################################
 
     ######################### XPATH ##########################
-    xpath = "//div/div/h5/text()[normalize-space()='12']/../../h6/text()"
+    xpath = "//tr[4]/td[not(@style='color: red;')]"
     ##########################################################
 
     # Avalua l'expressió XPath
